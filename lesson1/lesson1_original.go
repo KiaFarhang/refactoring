@@ -1,18 +1,20 @@
 package main
 
 import (
-	"io"
 	"log"
 	"net/http"
+
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
 )
 
-func getProducts(w http.ResponseWriter, r *http.Request) {
-	io.WriteString(w, "Hi!")
-}
-
 func main() {
-	http.HandleFunc("/", getProducts)
-	err := http.ListenAndServe(":4000", nil)
+	r := chi.NewRouter()
+	r.Use(middleware.Logger)
+	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("Hi!"))
+	})
+	err := http.ListenAndServe(":4000", r)
 
 	if err != nil {
 		log.Fatalf("Unable to start server, error was %v", err)
