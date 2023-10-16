@@ -6,22 +6,23 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"time"
 )
 
 type httpClient interface {
 	Do(req *http.Request) (*http.Response, error)
 }
 
-type ProductsClient interface {
-	GetProduct(ctx context.Context, productId string) (*Product, error)
-}
-
 type productsClient struct {
 	httpClient httpClient
 }
 
-func NewProductsClient(httpClient httpClient) ProductsClient {
+func NewProductsClient(httpClient httpClient) *productsClient {
 	return &productsClient{httpClient: httpClient}
+}
+
+func NewClient() *productsClient {
+	return &productsClient{httpClient: &http.Client{Timeout: time.Second * 5}}
 }
 
 const productsEndpointUrl string = "https://dummyjson.com/products/%s"
