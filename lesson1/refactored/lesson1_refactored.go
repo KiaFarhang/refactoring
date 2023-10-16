@@ -18,6 +18,7 @@ func main() {
 	r.Use(middleware.Recoverer)
 	r.Use(render.SetContentType(render.ContentTypeJSON))
 
+	// Instantiate our client without passing in a dependency, letting it construct a default one internally
 	productClient := products.NewClient()
 	server := web.NewServer(productClient)
 	r.Get("/products/{productId}", server.GetProduct)

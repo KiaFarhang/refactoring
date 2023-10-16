@@ -17,10 +17,20 @@ type productsClient struct {
 	httpClient httpClient
 }
 
-func NewProductsClient(httpClient httpClient) *productsClient {
+/*
+*
+Expose a constructor that allows passing in any dependencies. We use this in unit tests to
+provide a mocked httpClient, but it's useful outside of unit tests too - e.g. if we had one
+HTTP client we were using throughout the app and wanted our products client to use it too.
+*/
+func NewCustomClient(httpClient httpClient) *productsClient {
 	return &productsClient{httpClient: httpClient}
 }
 
+/*
+*
+Default constructor just provides sensible defaults for dependencies.
+*/
 func NewClient() *productsClient {
 	return &productsClient{httpClient: &http.Client{Timeout: time.Second * 5}}
 }
@@ -28,10 +38,19 @@ func NewClient() *productsClient {
 const productsEndpointUrl string = "https://dummyjson.com/products/%s"
 
 func (p *productsClient) GetProduct(ctx context.Context, productId string) (*Product, error) {
+	/**
+	Note: in a real app all this "make a GET request, check the status code" HTTP logic would
+	probably be in some separate, generic HTTP package that this client would just use - but you
+	get the idea.
+	*/
 	url := fmt.Sprintf(productsEndpointUrl, productId)
 
 	request, err := http.NewRequestWithContext(ctx, "GET", url, nil)
 
+	/**
+	This error-check is not unit tested - time is money and I'd rather focus on
+	logic that is more likely to go wrong/be coded incorrectly.
+	*/
 	if err != nil {
 		return nil, err
 	}

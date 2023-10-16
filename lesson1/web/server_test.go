@@ -12,6 +12,10 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+/*
+*
+Again, super-basic "return what I tell you to" mock implementation of the interface our code under test expects.
+*/
 type mockProductClient struct {
 	product *products.Product
 	err     error

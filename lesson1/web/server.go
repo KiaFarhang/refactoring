@@ -27,6 +27,12 @@ func NewServer(productClient ProductClient) *server {
 	return &server{productClient: productClient}
 }
 
+/*
+*
+This is not production-ready code! You'd probably want to return custom error messages, for example.
+The main point is that we're handling ONLY the web-layer logic here, and delegating the actual
+"get the product" code to the client layer.
+*/
 func (s *server) GetProduct(w http.ResponseWriter, r *http.Request) {
 	productIdParam := chi.URLParam(r, "productId")
 
@@ -34,6 +40,10 @@ func (s *server) GetProduct(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(400), 400)
 	}
 
+	/**
+	This Atoi and error check call is the ONLY piece of code that actually relates to our fictional
+	piece of work - everything else was just refactoring the code to make it easy to add (and test).
+	*/
 	_, err := strconv.Atoi(productIdParam)
 
 	if err != nil {
