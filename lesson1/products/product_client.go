@@ -9,6 +9,11 @@ import (
 	"time"
 )
 
+/*
+*
+Define interfaces where they're used/needed, not where they're implemented.
+https://github.com/golang/go/wiki/CodeReviewComments#interfaces
+*/
 type httpClient interface {
 	Do(req *http.Request) (*http.Response, error)
 }

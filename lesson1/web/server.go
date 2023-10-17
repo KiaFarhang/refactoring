@@ -10,11 +10,6 @@ import (
 	"github.com/go-chi/render"
 )
 
-/*
-*
-Define interfaces where they're used/needed, not where they're implemented.
-https://github.com/golang/go/wiki/CodeReviewComments#interfaces
-*/
 type ProductClient interface {
 	GetProduct(ctx context.Context, productId string) (*products.Product, error)
 }
